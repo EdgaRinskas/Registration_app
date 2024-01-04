@@ -1,0 +1,30 @@
+
+.registration-form {
+    background-color: #30d5c8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-label {
+    color: #30b9d5;
+    margin-bottom: 8px;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+  }
+  
+  .form-button {
+    background-color: #1f9990;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
