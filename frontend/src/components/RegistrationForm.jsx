@@ -1,4 +1,3 @@
-// Import necessary styles
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
