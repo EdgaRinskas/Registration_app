@@ -11,4 +11,27 @@
   color: #30b9d5;
   text-align: center;
   margin-bottom: 20px;
+  font-family: 'Paytone One', sans-serif;
+  text-transform: uppercase;
+  cursor:wait;
+}
+
+.app-title:hover {
+  background-color: white;
+  position: relative;
+}
+
+.app-title:hover::before {
+  content: "Register by filling in the form below";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  display: block;
+  font-size: 14px;
+  color: #30b9d5;
+  white-space: nowrap;
 }
