@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getUsers, deleteUser } from '../services/api';
+import { getUsers, deleteUser, updateUser } from '../services/api';
 import './UserList.css';
 
 const UserList = () => {
@@ -8,14 +8,24 @@ const UserList = () => {
 
   const { data: users } = useQuery('users', getUsers);
 
-  const mutation = useMutation((id) => deleteUser(id), {
+  const mutationDelete = useMutation((id) => deleteUser(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('users');
+    },
+  });
+
+  const mutationUpdate = useMutation(({ id, userData }) => updateUser(id, userData), {
     onSuccess: () => {
       queryClient.invalidateQueries('users');
     },
   });
 
   const handleDelete = (id) => {
-    mutation.mutate(id);
+    mutationDelete.mutate(id);
+  };
+
+  const handleUpdate = (id, updatedUserData) => {
+    mutationUpdate.mutate({ id, userData: updatedUserData });
   };
 
   return (
@@ -26,7 +36,9 @@ const UserList = () => {
             <th className="table-header">Name</th>
             <th className="table-header">Email</th>
             <th className="table-header">Age</th>
-            <th className="table-header">Action</th>
+            <th className="table-header">Date of Birth</th>
+            <th className="table-header">Gender</th>
+            <th className="table-header">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -36,12 +48,27 @@ const UserList = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.age}</td>
+                <td>{user.dateOfBirth}</td>
+                <td>{user.gender}</td>
                 <td>
                   <button
                     className="delete-button"
                     onClick={() => handleDelete(user._id)}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="update-button"
+                    onClick={() => {
+                      const updatedUserData = prompt(
+                        'Enter updated data (e.g., name,email,age,dateOfBirth,gender):'
+                      );
+                      if (updatedUserData) {
+                        handleUpdate(user._id, JSON.parse(updatedUserData));
+                      }
+                    }}
+                  >
+                    Update
                   </button>
                 </td>
               </tr>

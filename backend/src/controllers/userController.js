@@ -14,6 +14,8 @@ exports.createUser = async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     age: req.body.age,
+    dateOfBirth: req.body.dateOfBirth,
+    gender: req.body.gender,
   });
 
   try {
@@ -21,6 +23,32 @@ exports.createUser = async (req, res) => {
     res.status(201).json(newUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { name, email, age, dateOfBirth, gender } = req.body;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        email,
+        age,
+        dateOfBirth,
+        gender,
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

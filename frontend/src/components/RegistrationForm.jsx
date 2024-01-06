@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { addUser } from '../services/api';
 import './RegistrationForm.css';
 
 const RegistrationForm = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm();
   const queryClient = useQueryClient();
   const [isHovered, setIsHovered] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -25,6 +25,17 @@ const RegistrationForm = () => {
   const onSubmit = (data) => {
     mutation.mutate(data);
   };
+
+  const dateOfBirth = watch('dateOfBirth');
+
+  useEffect(() => {
+    if (dateOfBirth) {
+      const birthDate = new Date(dateOfBirth);
+      const currentDate = new Date();
+      const age = currentDate.getFullYear() - birthDate.getFullYear();
+      setValue('age', age);
+    }
+  }, [dateOfBirth, setValue]);
 
   return (
     <div>
@@ -51,8 +62,26 @@ const RegistrationForm = () => {
           Age:
           <input
             className="form-input"
+            type="number"
             {...register('age', { required: true })}
             placeholder="Enter your age"
+            readOnly
+          />
+        </label>
+
+        <label className="form-label">
+          Date of Birth:
+          <input
+            className={`form-input ${errors.dateOfBirth ? 'error' : ''}`}
+            type="date"
+            {...register('dateOfBirth', {
+              required: 'Date of Birth is required',
+              validate: (value) => {
+                const birthDate = new Date(value);
+                const currentDate = new Date();
+                return birthDate < currentDate || 'Invalid Date of Birth';
+              },
+            })}
           />
         </label>
 
@@ -64,7 +93,7 @@ const RegistrationForm = () => {
                 type="radio"
                 value="male"
                 name="gender"
-                {...register('gender', { required: false })}
+                {...register('gender')}
                 onChange={(e) => setSelectedGender(e.target.value)}
               />
               Male
@@ -74,7 +103,7 @@ const RegistrationForm = () => {
                 type="radio"
                 value="female"
                 name="gender"
-                {...register('gender', { required: false })}
+                {...register('gender')}
                 onChange={(e) => setSelectedGender(e.target.value)}
               />
               Female

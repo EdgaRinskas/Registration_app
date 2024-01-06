@@ -1,32 +1,72 @@
 .admin-login-form {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #70e2d9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .admin-login-form label {
-    display: block;
-    margin-bottom: 8px;
-    color: #30b9d5;
-  }
-  
-  .admin-login-form input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #aaaaaa;
-    border-radius: 4px;
-  }
-  
-  .admin-login-form button {
-    background-color: #1f9990;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #70e2d9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+}
+
+.admin-login-form:hover {
+  transform: scale(1.05);
+}
+
+.app-title {
+  color: #1f9990;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.form-description {
+  color: #30b9d5;
+  margin-bottom: 16px;
+}
+
+.admin-login-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #30b9d5;
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+}
+
+.admin-login-form button {
+  background-color: #1f9990;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin-login-form button:hover {
+  background-color: #197c72;
+}
+
+.admin-login-form .hint {
+  display: none;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #1f9990;
+  font-size: 0.9em;
+}
+
+.admin-login-form input:hover + .hint {
+  display: block;
+}
