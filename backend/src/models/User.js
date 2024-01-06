@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   age: { type: Number, required: true },
-  dateOfBirth: { type: String, required: true },
+  dateOfBirth: { type: String, default: '' },
   gender: { type: String },
 });
 

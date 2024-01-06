@@ -35,6 +35,17 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received. Closing server and MongoDB connection.');
+  
+  server.close(() => {
+    mongoose.connection.close(false, () => {
+      console.log('Server and MongoDB connection closed.');
+      process.exit(0);
+    });
+  });
 });
