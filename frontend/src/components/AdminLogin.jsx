@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './AdminLogin.css';
 
 const AdminLogin = ({ onLogin }) => {
@@ -30,6 +31,10 @@ const AdminLogin = ({ onLogin }) => {
       <button type="submit">Login</button>
     </form>
   );
+};
+
+AdminLogin.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default AdminLogin;
