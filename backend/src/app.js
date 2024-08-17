@@ -11,7 +11,8 @@ app.use(express.json());
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 
-const db = process.env.MONGOURI;
+const db = process.env.MONGODB_URI;
+
 
 const connectDB = async () => {
   try {
