@@ -1,15 +1,13 @@
-const User = require('../models/User');
+const User = require('../modules/User');
 
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    console.log('Retrieved Users:', users);
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.createUser = async (req, res) => {
   const user = new User({
@@ -34,13 +32,7 @@ exports.updateUser = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        name,
-        email,
-        age,
-        dateOfBirth,
-        gender,
-      },
+      { name, email, age, dateOfBirth, gender },
       { new: true }
     );
 
