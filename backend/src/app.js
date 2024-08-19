@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 
 const corsOptions = {
-  origin: 'https://66c192eb832d572935f4897d--registerahead.netlify.app',
+  origin: process.env.ALLOWED_ORIGIN || '*',
   optionsSuccessStatus: 200,
 };
 
@@ -25,7 +25,10 @@ const db = process.env.MONGODB_URI;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db);
+    await mongoose.connect(db, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
@@ -45,13 +48,15 @@ const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-process.on('SIGTERM', () => {
-  console.info('SIGTERM signal received. Closing server and MongoDB connection.');
-
+const gracefulShutdown = () => {
+  console.info('Shutdown signal received. Closing server and MongoDB connection.');
   server.close(() => {
     mongoose.connection.close(false, () => {
       console.log('Server and MongoDB connection closed.');
       process.exit(0);
     });
   });
-});
+};
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
