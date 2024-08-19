@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const app = express();
 
+
 const corsOptions = {
   origin: process.env.ALLOWED_ORIGIN || '*',
   optionsSuccessStatus: 200,
@@ -13,13 +14,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+
 app.use((req, res, next) => {
   console.log(`${req.method} request for '${req.url}'`);
   next();
 });
 
+
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
+
 
 const db = process.env.MONGODB_URI;
 
@@ -40,6 +44,7 @@ mongoose.connection.once('connected', () => {
   console.log(`Connected to MongoDB at ${db}`);
 });
 
+
 const PORT = process.env.PORT || 5000;
 
 connectDB();
@@ -47,6 +52,7 @@ connectDB();
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
 
 const gracefulShutdown = () => {
   console.info('Shutdown signal received. Closing server and MongoDB connection.');
