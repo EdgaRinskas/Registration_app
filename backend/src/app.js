@@ -5,8 +5,19 @@ require('dotenv').config();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173', // Local development
+  'https://66c192eb832d572935f4897d--registerahead.netlify.app' // Production
+];
+
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGIN || '*',
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   optionsSuccessStatus: 200,
 };
 
@@ -36,13 +47,9 @@ const connectDB = async () => {
   }
 };
 
-mongoose.connection.once('connected', () => {
-  console.log(`Connected to MongoDB at ${db}`);
-});
+connectDB();
 
 const PORT = process.env.PORT || 5000;
-
-connectDB();
 
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
