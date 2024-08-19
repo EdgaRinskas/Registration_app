@@ -1,34 +1,35 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 
-
+// CORS configuration
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGIN || '*',
+  origin: process.env.ALLOWED_ORIGIN || '*', // Allows requests from specified origin
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
-app.use(express.json());
+app.use(cors(corsOptions)); // Enable CORS
+app.use(express.json()); // Parse incoming JSON requests
 
-
+// Middleware to log requests
 app.use((req, res, next) => {
   console.log(`${req.method} request for '${req.url}'`);
   next();
 });
 
-
+// Load user routes (adjust path to reflect the structure)
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 
-
+// Database connection string from environment variables
 const db = process.env.MONGODB_URI;
 
 const connectDB = async () => {
   try {
+    // Connect to MongoDB
     await mongoose.connect(db, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -40,12 +41,13 @@ const connectDB = async () => {
   }
 };
 
+
 mongoose.connection.once('connected', () => {
   console.log(`Connected to MongoDB at ${db}`);
 });
 
-
 const PORT = process.env.PORT || 5000;
+
 
 connectDB();
 
@@ -63,6 +65,7 @@ const gracefulShutdown = () => {
     });
   });
 };
+
 
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
