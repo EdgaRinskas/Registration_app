@@ -6,7 +6,7 @@ import './UserList.css';
 const UserList = () => {
   const queryClient = useQueryClient();
 
-  const { data: users } = useQuery('users', getUsers);
+  const { data: users, error, isLoading } = useQuery('users', getUsers);
 
   const mutationDelete = useMutation((id) => deleteUser(id), {
     onSuccess: () => {
@@ -28,6 +28,9 @@ const UserList = () => {
     mutationUpdate.mutate({ id, userData: updatedUserData });
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading users</div>;
+
   return (
     <div className="user-list-container">
       <table className="user-table">
@@ -42,37 +45,40 @@ const UserList = () => {
           </tr>
         </thead>
         <tbody>
-          {users &&
-            users.map((user) => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.age}</td>
-                <td>{user.dateOfBirth}</td>
-                <td>{user.gender}</td>
-                <td>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete(user._id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="update-button"
-                    onClick={() => {
-                      const updatedUserData = prompt(
-                        'Enter updated data (e.g., name,email,age,dateOfBirth,gender):'
-                      );
-                      if (updatedUserData) {
+          {users && users.map((user) => (
+            <tr key={user._id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.age}</td>
+              <td>{user.dateOfBirth}</td>
+              <td>{user.gender}</td>
+              <td>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(user._id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="update-button"
+                  onClick={() => {
+                    const updatedUserData = prompt(
+                      'Enter updated data (e.g., name,email,age,dateOfBirth,gender):'
+                    );
+                    if (updatedUserData) {
+                      try {
                         handleUpdate(user._id, JSON.parse(updatedUserData));
+                      } catch (error) {
+                        alert('Invalid input format. Please use JSON.');
                       }
-                    }}
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    }
+                  }}
+                >
+                  Update
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
